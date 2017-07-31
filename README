@@ -1,0 +1,6 @@
+***Dependencies
+
+pip install python-craigslist
+pip install slacklient
+pip install sqlalchemy
+pip install python-dateutil
