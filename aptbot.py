@@ -57,7 +57,7 @@ def extract_price(result):
     return price
 
 def check_in_box(coords, box):
-    if box[0][0] < coords[0] < box[1][0] and box[1][1] < cords[1] < box[0][1]:
+    if box[0][0] < coords[0] < box[1][0] and box[1][1] < coords[1] < box[0][1]:
         return True
     return False
 
@@ -67,12 +67,7 @@ def filter_results(results):
     for result in results:
         listing = query_for_listing(result)
         if listing is None:
-            if result["geotag"]:
-                for a, coords in settings.BOXES.items():
-                    if check_in_box(result["geotag"], coords):
-                       result["area"] = a
-                       filtered_results.append(result)
-            elif result["where"]:
+            if result["where"]:
                 for hood in settings.NEIGHBORHOODS:
                     if hood in result["where"].lower():
                         result["area"] = result["where"]
@@ -96,9 +91,9 @@ def init_craigslist():
             'max_price':settings.MAX_PRICE,
             'min_price':settings.MIN_PRICE,
             'min_bedrooms':4,
-            'max_bedrooms':4,
+            'max_bedrooms':5,
             'min_bathrooms':1,
-            'max_bathrooms':3
+            'max_bathrooms':4
         }
     )
 
@@ -118,7 +113,7 @@ def scrape():
 
     cl = init_craigslist()
 
-    results = cl.get_results(sort_by='newest', geotagged=True, limit=20)
+    results = cl.get_results(sort_by='newest', geotagged=True, limit=200)
 
     filtered_results = filter_results(results)
 
